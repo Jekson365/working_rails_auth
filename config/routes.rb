@@ -13,6 +13,6 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   post '/login',to: 'authentication#login'
-
+  get '/current',to: 'users#show_current_user'
   resources :users
 end
