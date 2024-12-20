@@ -14,14 +14,18 @@ class ApplicationController < ActionController::API
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError
     render json: { error: 'unauthorized' }, status: :unauthorized
   end
-
   def current_user
-    return unless cookies.signed[:jwt] # Check if JWT cookie exists
+    return unless cookies.signed[:jwt]
 
     token = cookies.signed[:jwt]
-    decoded = JsonWebToken.decode(token) # Decode the JWT
-    @current_user ||= User.find_by(id: decoded[:user_id]) # Memoize and find user
+    decoded = JsonWebToken.decode(token)
+    @current_user ||= User.find_by(id: decoded[:user_id])
   rescue JWT::DecodeError, ActiveRecord::RecordNotFound
-    nil # Return nil if token is invalid or user is not found
+    nil
+  end
+
+  def logout
+    cookies.delete(:jwt, domain: :all, secure: true, expires: Time.now - 2.days,same_site: :none)
+    render json: {message:"user logged out"},status: :ok
   end
 end

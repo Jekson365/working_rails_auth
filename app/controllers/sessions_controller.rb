@@ -9,6 +9,10 @@ class SessionsController < ApplicationController
     end
   end
 
+  def logout_user
+    logout
+  end
+
   private
 
   def user_params

@@ -1,3 +1,6 @@
 class User < ApplicationRecord
+  validates :email, uniqueness: true
   has_secure_password
-end
+
+  has_many :liked_posts
+end 

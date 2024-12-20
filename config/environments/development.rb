@@ -40,7 +40,8 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
-
+  config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.allowed_request_origins = ["http://localhost:3005"]
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
 

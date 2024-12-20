@@ -1,17 +1,14 @@
 class AuthenticationController < ApplicationController
-  before_action :authorize_request, except: :login
+  # before_action :authorize_request, except: :login
 
   def login
     @user = User.find_by_email(params[:email])
     if @user&.authenticate(params[:password])
       token = JsonWebToken.encode(user_id: @user.id)
-      time = Time.now + 15.seconds.to_i
+      time = Time.now + 1.days
 
-      cookies.signed[:jwt] = {
-        value: token,
-        httponly: true,
-        expires: time
-      }
+      cookies.signed[:jwt] =
+        { value: token, same_site: :none, secure: true,expires: 1.day.from_now}
 
       render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M"),
                      username: @user.name }, status: :ok
